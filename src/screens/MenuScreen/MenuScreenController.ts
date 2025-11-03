@@ -1,4 +1,4 @@
-import { GameScreenController } from "../GameScreen/GameScreenController";
+import { WordsDropGameController } from "../WordsDropGame/WordsDropGameController";
 
 // 可选：点击音效（若 public/sounds/click.wav 存在就会播放）
 function loadClick() {
@@ -28,7 +28,7 @@ export class MenuScreenController {
       // 切到游戏画面
       this.root.innerHTML = "";
       setTimeout(() => {
-        new GameScreenController(this.root); // this.root 类型为 HTMLDivElement，匹配构造函数
+        new WordsDropGameController(this.root); // this.root 类型为 HTMLDivElement，匹配构造函数
       }, 200);
     });
   }

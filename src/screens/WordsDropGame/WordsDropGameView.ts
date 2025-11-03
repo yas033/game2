@@ -1,9 +1,9 @@
 import Konva from "konva";
-import type { GameScreenModel } from "./GameScreenModel";
+import type { WordsDropGameModel } from "./WordsDropGameModel";
 
 const CELL = 48;
 
-export class GameScreenView {
+export class WordsDropGameView {
   stage: Konva.Stage;
   gridLayer = new Konva.Layer();
   blockLayer = new Konva.Layer();
@@ -19,7 +19,7 @@ export class GameScreenView {
 
   private overlayGroup = new Konva.Group({ visible: false });
 
-  constructor(container: string | HTMLDivElement, private model: GameScreenModel) {
+  constructor(container: string | HTMLDivElement, private model: WordsDropGameModel) {
     const WIDTH  = this.model.cols * CELL;
     const HEIGHT = this.model.rows * CELL;
 

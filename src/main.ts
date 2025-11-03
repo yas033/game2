@@ -1,9 +1,9 @@
-import { MenuScreenController } from "./screens/MenuScreen/MenuScreenController";
-
-// 保证拿到的就是 <div id="container">
+import { ResultsScreenController } from "./screens/ResultsScreen/ResultsScreenController";
 const root = document.getElementById("container") as HTMLDivElement;
+
 if (!root) {
-    throw new Error('Missing <div id="container"> in index.html');
+    throw new Error("Missing <div id='container'> in index.html");
 }
 
-new MenuScreenController(root);
+// GameOver / MiniGame Hub page
+new ResultsScreenController(root, 0, 0);

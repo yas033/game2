@@ -1,7 +1,6 @@
-import { GameScreenModel } from "./GameScreenModel";
-import { GameScreenView } from "./GameScreenView";
+import { WordsDropGameModel } from "./WordsDropGameModel";
+import { WordsDropGameView } from "./WordsDropGameView";
 import { ResultsScreenController } from "../ResultsScreen/ResultsScreenController";
-
 const POINTS_PER_HEART = 10;
 
 type SoundSet = {
@@ -25,18 +24,18 @@ function loadSound(name: string): HTMLAudioElement | undefined {
   return undefined;
 }
 
-export class GameScreenController {
-  model: GameScreenModel;
-  view: GameScreenView;
+export class WordsDropGameController {
+  model: WordsDropGameModel;
+  view: WordsDropGameView;
   sounds: SoundSet;
   private tickTimer?: number;
-  private fallTimer?: number;    // ⭐ 新增：控制方块下落
-  private speedBoostTimer?: number; // ⭐ 新增：控制速度递增
-  private dropInterval = 1200;   // ⭐ 初始下落间隔（毫秒）
+  private fallTimer?: number;       // 控制方块下落
+  private speedBoostTimer?: number; // 控制速度递增
+  private dropInterval = 1200;      // 初始下落间隔（毫秒）
 
   constructor(container: string | HTMLDivElement) {
-    this.model = new GameScreenModel(90);
-    this.view = new GameScreenView(container, this.model);
+    this.model = new WordsDropGameModel(90); // 游戏时长 90 秒
+    this.view = new WordsDropGameView(container, this.model);
     this.sounds = {
       correct: loadSound("correct.ogg"),
       wrong:   loadSound("wrong.ogg"),
@@ -45,10 +44,10 @@ export class GameScreenController {
     };
 
     this.bindKeys();
-    this.countdownThenStart(); // count 3-2-1
+    this.countdownThenStart(); // 倒计时开始游戏
   }
 
-  // --- key board movements ---
+  // --- 键盘控制 ---
   private bindKeys() {
     window.addEventListener("keydown", (e) => {
       if (!this.model.running) return;
@@ -60,12 +59,14 @@ export class GameScreenController {
           if (this.model.current) this.view.renderPreview(this.model.current);
           this.sounds.click?.play().catch(() => {});
           break;
+
         case "ArrowRight":
         case "d":
           this.model.move(1);
           if (this.model.current) this.view.renderPreview(this.model.current);
           this.sounds.click?.play().catch(() => {});
           break;
+
         case " ":
         case "ArrowDown":
           e.preventDefault();
@@ -76,7 +77,7 @@ export class GameScreenController {
     });
   }
 
-  // --- count down ---
+  // --- 倒计时开始 ---
   private async countdownThenStart() {
     this.model.running = false;
     this.view.updateHUD(this.model.score, this.model.hearts, this.model.timeLeft);
@@ -88,18 +89,16 @@ export class GameScreenController {
     }
     this.view.showOverlay("", false);
 
-    // first spawn
+    // 首次生成方块
     const spawned = this.model.spawn();
     if (!spawned) return this.end("Stack Overflow");
     this.view.renderPreview(spawned);
 
     this.model.running = true;
-
-    // --- Start timers ---
     this.startTimers();
   }
 
-  // --- drop the current block ---
+  // --- 下落逻辑 ---
   private drop() {
     const res = this.model.hardDrop();
     if (res.overflow) {
@@ -119,7 +118,7 @@ export class GameScreenController {
 
     this.view.updateHUD(this.model.score, this.model.hearts, this.model.timeLeft);
 
-    // spawn next
+    // 下一块
     const spawned = this.model.spawn();
     if (!spawned) {
       this.end("Stack Overflow");
@@ -128,9 +127,9 @@ export class GameScreenController {
     this.view.renderPreview(spawned);
   }
 
-  // --- start all game timers ---
+  // --- 游戏计时器 ---
   private startTimers() {
-    // 倒计时定时器
+    // 倒计时
     this.tickTimer = window.setInterval(() => {
       if (!this.model.running) return;
       this.model.timeLeft--;
@@ -138,17 +137,17 @@ export class GameScreenController {
       if (this.model.timeLeft <= 0) this.end("Time Up");
     }, 1000);
 
-    // ⭐ 方块自动下落
+    // 方块下落
     this.fallTimer = window.setInterval(() => {
       if (!this.model.running) return;
       this.drop();
     }, this.dropInterval);
 
-    // ⭐ 每 5 秒提速 +3%
+    // 每 5 秒提速 +3%
     this.speedBoostTimer = window.setInterval(() => {
       if (!this.model.running) return;
-      this.dropInterval *= 0.97; // 降低间隔即加快速度
-      clearInterval(this.fallTimer); // 重启新的 fallTimer
+      this.dropInterval *= 0.97;
+      clearInterval(this.fallTimer);
       this.fallTimer = window.setInterval(() => {
         if (!this.model.running) return;
         this.drop();
@@ -157,7 +156,7 @@ export class GameScreenController {
     }, 5000);
   }
 
-  // --- end the game ---
+  // --- 游戏结束 ---
   private end(reason: string) {
     this.model.running = false;
     clearInterval(this.tickTimer);
@@ -171,7 +170,7 @@ export class GameScreenController {
 
     this.sounds.wrong?.play().catch(() => {});
 
-    // 1 second later, go to results screen
+    // 1 秒后跳转到结果页
     setTimeout(() => {
       const container = document.getElementById("container") as HTMLDivElement;
       if (!container) return;

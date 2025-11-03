@@ -29,7 +29,7 @@ function wordFor(cat: Category): string {
   return ADJS[Math.floor(Math.random()*ADJS.length)];
 }
 
-export class GameScreenModel {
+export class WordsDropGameModel {
   grid: (WordBlock | null)[][];
   current: WordBlock | null = null;
 

@@ -1,24 +1,25 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WordBlock</title>
-    <style>
-      html, body { height: 100%; margin: 0; }
-      #container {
-        width: 100vw;
-        height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: #0b0b12;
-        overflow: hidden;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="container"></div>
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>Game Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{margin:0;height:100vh;background:#0b1220;color:#fff;
+      font-family:Inter,Arial,sans-serif;display:flex;flex-direction:column;justify-content:center;align-items:center}
+    h1{font-size:2.5rem;margin-bottom:1rem}
+    p{opacity:.8;margin:.25rem 0 1rem}
+    button{background:#fff;color:#0b1220;border:0;padding:12px 28px;font-size:1rem;border-radius:10px;margin:8px;cursor:pointer;transition:.2s}
+    button:hover{background:#60a5fa;color:#fff}
+  </style>
+</head>
+<body>
+  <h1>Game Over</h1>
+  <p>Try the MiniGame! Help you earn your heart back!</p>
+  <div>
+    <button onclick="location.href='/words-drop-game.html'">Words Drop Game</button>
+    <button onclick="location.href='/word-bubble-game.html'">Word Bubble Game</button>
+    <button onclick="location.href='/'">Home</button>
+  </div>
+</body>
 </html>
